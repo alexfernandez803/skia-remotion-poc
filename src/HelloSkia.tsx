@@ -12,6 +12,7 @@ export const HelloSkia: React.FC = () => {
 			const image = ref.current?.makeImageSnapshot();
 			if (image) {
 
+
 				const data = image.encodeToBase64(ImageFormat.PNG, 100);
 				const url = `data:image/png;base64,${data}`;
 				console.log(url)
