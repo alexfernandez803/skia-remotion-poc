@@ -1,31 +1,27 @@
-import {SkiaCanvas} from '@remotion/skia';
-import {useFont} from '@shopify/react-native-skia';
-import {staticFile, useVideoConfig} from 'remotion';
-import {AssetManager} from './AssetManager';
-import {Drawing} from './Drawing';
+import { Canvas, Circle, ImageFormat, useCanvasRef } from '@shopify/react-native-skia';
+import { useEffect } from 'react';
 
-const roboto = staticFile('Roboto-Bold.ttf');
+
 
 export const HelloSkia: React.FC = () => {
-	const {height, width} = useVideoConfig();
+	const ref = useCanvasRef();
+	useEffect(() => {
+		setTimeout(() => {
+			// you can pass an optional rectangle
+			// to only save part of the image
+			const image = ref.current?.makeImageSnapshot();
+			if (image) {
 
-	const bigFont = useFont(roboto, 64);
-	const smallFont = useFont(roboto, 30);
-
-	if (bigFont === null || smallFont === null) {
-		return null;
-	}
-
+				const data = image.encodeToBase64(ImageFormat.PNG, 100);
+				const url = `data:image/png;base64,${data}`;
+				console.log(url)
+			}
+		}, 1000)
+	});
 	return (
-		<SkiaCanvas height={height} width={width}>
-			<AssetManager
-				images={[]}
-				typefaces={{
-					Roboto: roboto,
-				}}
-			>
-				<Drawing />
-			</AssetManager>
-		</SkiaCanvas>
+		<Canvas style={{ flex: 1 }} ref={ref}>
+			<Circle r={128} cx={128} cy={128} color="red" />
+		</Canvas>
 	);
+
 };
